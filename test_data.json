@@ -1,0 +1,35 @@
+{
+  "passenger": {
+    "name": "Roman Zhuchkov",
+    "phone": "+35797935384"
+  },
+  "driver": {
+    "name": "Alexey Kurdup",
+    "phone": "+35797935386",
+    "license": "Russian"
+  },
+  "vehicle": {
+    "make": "BMW",
+    "model": "C5-series",
+    "year": "2024",
+    "plate": "ALEX777",
+    "color": "Burgundy"
+  },
+  "location": {
+    "gps_lat": 35.1856,
+    "gps_lng": 33.3823,
+    "address": "Paphos, ABC Office"
+  },
+  "incident": {
+    "type": "medical_emergency",
+    "description": "Passenger feeling chest pain and difficulty breathing",
+    "timestamp": "2024-12-15T14:30:00Z",
+    "severity": "high"
+  },
+  "ride_info": {
+    "ride_id": "RG-2024-1215-001",
+    "pickup_address": "Eleftherias Square, Nicosia, Cyprus",
+    "destination": "Kings Mall",
+    "estimated_arrival": "2024-12-15T15:15:00Z"
+  }
+}

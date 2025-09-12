@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideGuard Safety - Emergency Assistant Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .ride-info {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+            border: 2px solid #e9ecef;
+        }
+
+        .ride-info h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #6c757d;
+        }
+
+        .info-value {
+            color: #495057;
+        }
+
+        .emergency-section {
+            margin: 40px 0;
+        }
+
+        .sos-button {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border: none;
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
+            margin: 20px auto;
+            display: block;
+        }
+
+        .sos-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .sos-button:active {
+            transform: translateY(-2px);
+        }
+
+        .sos-button.calling {
+            animation: pulse 1.5s infinite;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 10px 20px rgba(243, 156, 18, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 15px 30px rgba(243, 156, 18, 0.5);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 10px 20px rgba(243, 156, 18, 0.3);
+            }
+        }
+
+        .status-section {
+            margin: 30px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+
+        .status {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .status.idle {
+            color: #28a745;
+        }
+
+        .status.calling {
+            color: #ffc107;
+        }
+
+        .status.success {
+            color: #28a745;
+        }
+
+        .status.error {
+            color: #dc3545;
+        }
+
+        .logs {
+            background: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            min-height: 200px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .logs h4 {
+            color: #3498db;
+            margin-bottom: 15px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-left: 3px solid #3498db;
+            padding-left: 10px;
+        }
+
+        .log-timestamp {
+            color: #95a5a6;
+            font-size: 0.8em;
+        }
+
+        .response-details {
+            background: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+            display: none;
+        }
+
+        .response-details.show {
+            display: block;
+        }
+
+        .response-details h5 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+
+        .response-details pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ RideGuard Safety</h1>
+            <p>Emergency AI Assistant Demo</p>
+        </div>
+
+        <div class="ride-info">
+            <h3>📍 Current Ride Information</h3>
+            <div class="info-row">
+                <span class="info-label">Passenger:</span>
+                <span class="info-value">Maria Georgiou</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Driver:</span>
+                <span class="info-value">Andreas Constantinou</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Vehicle:</span>
+                <span class="info-value">2020 Toyota Corolla (KBA 123)</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Location:</span>
+                <span class="info-value">Ledra Street 45, Nicosia, Cyprus</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Destination:</span>
+                <span class="info-value">Cyprus Mall, Engomi</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Ride ID:</span>
+                <span class="info-value">RG-2024-1215-001</span>
+            </div>
+        </div>
+
+        <div class="emergency-section">
+            <h2 style="margin-bottom: 20px; color: #2c3e50;">Emergency Assistance</h2>
+            <button id="sosButton" class="sos-button" onclick="triggerEmergency()">
+                SOS<br>
+                <span style="font-size: 0.5em;">EMERGENCY</span>
+            </button>
+            <p style="margin-top: 15px; color: #7f8c8d;">Press the SOS button to initiate emergency call</p>
+        </div>
+
+        <div class="status-section">
+            <div id="status" class="status idle">🟢 System Ready</div>
+            <div id="statusDetails" style="font-size: 0.9em; color: #6c757d;">Click SOS button to test emergency call system</div>
+        </div>
+
+        <div id="responseDetails" class="response-details">
+            <h5>Call Response Details:</h5>
+            <pre id="responseContent"></pre>
+        </div>
+
+        <div class="logs">
+            <h4>📋 System Logs</h4>
+            <div id="logContainer">
+                <div class="log-entry">
+                    <span class="log-timestamp">[System Started]</span> RideGuard Emergency System initialized
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addLog(message) {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.innerHTML = `<span class="log-timestamp">[${timestamp}]</span> ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function updateStatus(status, message) {
+            const statusElement = document.getElementById('status');
+            const statusDetails = document.getElementById('statusDetails');
+            
+            statusElement.className = `status ${status}`;
+            statusDetails.textContent = message;
+            
+            switch(status) {
+                case 'idle':
+                    statusElement.textContent = '🟢 System Ready';
+                    break;
+                case 'calling':
+                    statusElement.textContent = '🟡 Emergency Call in Progress';
+                    break;
+                case 'success':
+                    statusElement.textContent = '✅ Emergency Call Completed';
+                    break;
+                case 'error':
+                    statusElement.textContent = '❌ Emergency Call Failed';
+                    break;
+            }
+        }
+
+        async function triggerEmergency() {
+            const sosButton = document.getElementById('sosButton');
+            const responseDetails = document.getElementById('responseDetails');
+            
+            sosButton.classList.add('calling');
+            sosButton.disabled = true;
+            
+            updateStatus('calling', 'Initiating emergency call to authorities...');
+            addLog('🚨 EMERGENCY TRIGGERED - Initiating AI assistant call');
+            addLog('📞 Contacting emergency services via Bland.ai');
+            
+            try {
+                const response = await fetch('/api/emergency', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        incident_type: 'medical_emergency',
+                        severity: 'high',
+                        additional_info: 'Demo emergency call from RideGuard system'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateStatus('success', `Emergency call initiated successfully. Call ID: ${data.call_id || 'N/A'}`);
+                    addLog(`✅ Emergency call successful - Call ID: ${data.call_id || 'N/A'}`);
+                    addLog(`📍 Emergency services contacted for: ${data.data_used.location}`);
+                    addLog(`👤 Passenger: ${data.data_used.passenger}`);
+                    addLog(`🚗 Vehicle: ${data.data_used.vehicle}`);
+                    addLog(`📱 Phone: ${data.emergency_phone}`);
+                    
+                    if (data.sms_sent) {
+                        addLog('📱 SMS notification sent successfully');
+                    }
+                    
+                    document.getElementById('responseContent').textContent = JSON.stringify(data, null, 2);
+                    responseDetails.classList.add('show');
+                } else {
+                    throw new Error(data.message || 'Emergency call failed');
+                }
+                
+            } catch (error) {
+                updateStatus('error', `Emergency call failed: ${error.message}`);
+                addLog(`❌ Emergency call failed: ${error.message}`);
+                addLog('🔄 Please try again or contact emergency services directly');
+            } finally {
+                setTimeout(() => {
+                    sosButton.classList.remove('calling');
+                    sosButton.disabled = false;
+                }, 2000);
+            }
+        }
+
+        addLog('🛡️ RideGuard Emergency System ready for demonstration');
+        addLog('🎯 Demo configured for Cyprus emergency services (+357 99000000)');
+        addLog('🤖 AI Assistant powered by Bland.ai technology');
+    </script>
+</body>
+</html>
