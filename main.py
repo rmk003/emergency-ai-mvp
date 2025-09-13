@@ -45,40 +45,45 @@ def create_emergency_script(data: dict, incident_type: str = "medical_emergency"
     location = data["location"]
     
     script = f"""
-URGENT EMERGENCY CALL - RIDEGUARD SAFETY ALERT
+URGENT EMERGENCY CALL - PASSENGER IN DANGER
 
-This is an automated emergency call from RideGuard Safety System.
+This is an automated emergency call from RideGuard Safety System by inDrive Company.
+I am calling on behalf of a passenger who is currently in danger and needs immediate assistance.
+
+PASSENGER IN DISTRESS:
+- Passenger Name: {passenger['name']}
+- Passenger Phone: {passenger['phone']}
+- The passenger activated emergency SOS from the inDrive app
 
 INCIDENT DETAILS:
 - Emergency Type: {incident_type.replace('_', ' ').title()}
 - Time: {datetime.now().strftime('%H:%M %Z')}
-- Severity: HIGH PRIORITY
+- Severity: HIGH PRIORITY - PASSENGER IN IMMEDIATE DANGER
 
-PASSENGER INFORMATION:
-- Name: {passenger['name']}
-- Phone: {passenger['phone']}
+THREATENING DRIVER INFORMATION:
+- Driver Name: {driver['name']}
+- Driver Phone: {driver['phone']}
+- Driver License: {driver['license']}
 
-DRIVER INFORMATION:
-- Name: {driver['name']}
-- Phone: {driver['phone']}
-- License: {driver['license']}
-
-VEHICLE INFORMATION:
+VEHICLE IDENTIFICATION:
 - Vehicle: {vehicle['year']} {vehicle['make']} {vehicle['model']}
 - Color: {vehicle['color']}
 - License Plate: {vehicle['plate']}
 
-LOCATION:
+CURRENT LOCATION:
 - Address: {location['address']}
 - GPS Coordinates: {location['gps_lat']}, {location['gps_lng']}
+- This is the exact location where the passenger needs help
 
 IMMEDIATE ACTION REQUIRED:
-Please dispatch emergency services to the location immediately. The passenger requires medical attention. 
-Driver and vehicle information provided for identification.
+The passenger is in danger and requires immediate police assistance.
+This call is made by RideGuard Safety System from inDrive Company on behalf of the passenger who pressed the emergency SOS button.
+Please dispatch police units to the location immediately.
 
-This is an automated call. For urgent follow-up, contact passenger at {passenger['phone']} or driver at {driver['phone']}.
+For urgent follow-up, contact the passenger directly at {passenger['phone']}.
+The driver's number is {driver['phone']}.
 
-Thank you.
+This is an automated emergency call from inDrive's RideGuard Safety System protecting passenger safety.
 """
     return script.strip()
 

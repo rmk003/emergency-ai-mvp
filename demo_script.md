@@ -64,10 +64,10 @@ def create_emergency_script(data, incident_type):
   "call_id": "call_123456",
   "emergency_phone": "+35799000000",
   "data_used": {
-    "passenger": "Maria Georgiou",
-    "driver": "Andreas Constantinou",
-    "location": "Ledra Street 45, Nicosia, Cyprus",
-    "vehicle": "Toyota Corolla (KBA 123)"
+    "passenger": "Roman Zhuchkov",
+    "driver": "Alexey Kurdup",
+    "location": "Paphos, ABC center",
+    "vehicle": "BMW 5-series"
   }
 }
 ```
