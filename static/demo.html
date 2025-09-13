@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RideGuard Safety - Emergency Assistant Demo</title>
+    <title>SOS Emergency</title>
     <style>
         * {
             margin: 0;
@@ -12,326 +12,368 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #ffffff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: #333;
+            color: #000;
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
+        .mobile-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .status-bar {
+            background: #ffffff;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .time {
+            color: #000;
+        }
+
+        .indicators {
+            display: flex;
+            gap: 4px;
+            align-items: center;
         }
 
         .header {
-            margin-bottom: 30px;
+            padding: 16px 20px;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .header h1 {
-            color: #2c3e50;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .header p {
-            color: #7f8c8d;
-            font-size: 1.1em;
-        }
-
-        .ride-info {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px 0;
-            text-align: left;
-            border: 2px solid #e9ecef;
-        }
-
-        .ride-info h3 {
-            color: #495057;
-            margin-bottom: 15px;
-            font-size: 1.4em;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-
-        .info-label {
+            font-size: 18px;
             font-weight: 600;
-            color: #6c757d;
+            color: #000;
         }
 
-        .info-value {
-            color: #495057;
-        }
-
-        .emergency-section {
-            margin: 40px 0;
-        }
-
-        .sos-button {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        .close-btn {
+            font-size: 24px;
+            color: #666;
+            background: none;
             border: none;
-            color: white;
-            font-size: 2em;
-            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
-            margin: 20px auto;
-            display: block;
         }
 
-        .sos-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 25px rgba(231, 76, 60, 0.4);
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .sos-button:active {
+        .instruction {
+            padding: 20px;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.4;
+            text-align: left;
+        }
+
+        .map-container {
+            height: 250px;
+            background: #f5f5f5;
+            margin: 0 20px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250"><rect fill="%23e8f4fd" width="400" height="250"/><path fill="%23c3e8ff" d="M0,180 Q100,160 200,180 T400,170 L400,250 L0,250 Z"/><circle cx="200" cy="125" r="8" fill="%234285f4"/><rect x="180" y="105" width="40" height="20" rx="10" fill="white" stroke="%234285f4" stroke-width="2"/><text x="200" y="116" text-anchor="middle" font-family="Arial" font-size="10" fill="%234285f4">📍</text></svg>');
+        }
+
+        .location-marker {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #4285f4;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .vehicle-info {
+            padding: 20px;
+        }
+
+        .vehicle-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 16px;
+        }
+
+        .vehicle-item:last-child {
+            border-bottom: none;
+        }
+
+        .vehicle-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 16px;
+            color: #666;
+        }
+
+        .vehicle-text {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .emergency-button-container {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 360px;
+        }
+
+        .emergency-button {
+            width: 100%;
+            height: 56px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 28px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+        .emergency-button:hover {
+            background: #c82333;
             transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
         }
 
-        .sos-button.calling {
+        .emergency-button.calling {
+            background: #ff6b35;
             animation: pulse 1.5s infinite;
-            background: linear-gradient(135deg, #f39c12, #e67e22);
         }
 
         @keyframes pulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 10px 20px rgba(243, 156, 18, 0.3);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 15px 30px rgba(243, 156, 18, 0.5);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 10px 20px rgba(243, 156, 18, 0.3);
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
         }
 
-        .status-section {
-            margin: 30px 0;
-            padding: 20px;
-            border-radius: 10px;
-            background: #f8f9fa;
+        .emergency-icon {
+            font-size: 20px;
         }
 
-        .status {
-            font-size: 1.2em;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .status.idle {
-            color: #28a745;
-        }
-
-        .status.calling {
-            color: #ffc107;
-        }
-
-        .status.success {
-            color: #28a745;
-        }
-
-        .status.error {
-            color: #dc3545;
-        }
-
-        .logs {
-            background: #2c3e50;
-            color: #ecf0f1;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-            text-align: left;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            min-height: 200px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .logs h4 {
-            color: #3498db;
-            margin-bottom: 15px;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        .log-entry {
-            margin-bottom: 8px;
-            padding: 5px 0;
-            border-left: 3px solid #3498db;
-            padding-left: 10px;
-        }
-
-        .log-timestamp {
-            color: #95a5a6;
-            font-size: 0.8em;
-        }
-
-        .response-details {
-            background: #e8f5e8;
-            border: 1px solid #c3e6c3;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-            text-align: left;
+        .logs-container {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 360px;
+            max-height: 200px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 12px;
+            padding: 16px;
             display: none;
         }
 
-        .response-details.show {
+        .logs-container.show {
             display: block;
         }
 
-        .response-details h5 {
-            color: #155724;
-            margin-bottom: 10px;
+        .logs-header {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
         }
 
-        .response-details pre {
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-x: auto;
-            font-size: 0.85em;
+        .log-entry {
+            color: #ffffff;
+            font-size: 12px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+            font-family: monospace;
+        }
+
+        .log-timestamp {
+            color: #888;
+            margin-right: 8px;
+        }
+
+        .status-indicator {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: white;
+        }
+
+        .status-indicator.idle {
+            background: #28a745;
+        }
+
+        .status-indicator.calling {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .status-indicator.success {
+            background: #28a745;
+        }
+
+        .status-indicator.error {
+            background: #dc3545;
+        }
+
+        .home-indicator {
+            position: fixed;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: #000;
+            border-radius: 3px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="mobile-container">
+        <div class="status-bar">
+            <span class="time">10:28</span>
+            <div class="indicators">
+                <span>📶</span>
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+
         <div class="header">
-            <h1>🛡️ RideGuard Safety</h1>
-            <p>Emergency AI Assistant Demo</p>
+            <h1>SOS</h1>
+            <button class="close-btn">×</button>
         </div>
 
-        <div class="ride-info">
-            <h3>📍 Current Ride Information</h3>
-            <div class="info-row">
-                <span class="info-label">Passenger:</span>
-                <span class="info-value">Maria Georgiou</span>
+        <div class="content">
+            <div class="instruction">
+                In an emergency, provide the police with the address, car brand, and license plate number
             </div>
-            <div class="info-row">
-                <span class="info-label">Driver:</span>
-                <span class="info-value">Andreas Constantinou</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Vehicle:</span>
-                <span class="info-value">2020 Toyota Corolla (KBA 123)</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Location:</span>
-                <span class="info-value">Ledra Street 45, Nicosia, Cyprus</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Destination:</span>
-                <span class="info-value">Cyprus Mall, Engomi</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Ride ID:</span>
-                <span class="info-value">RG-2024-1215-001</span>
-            </div>
-        </div>
 
-        <div class="emergency-section">
-            <h2 style="margin-bottom: 20px; color: #2c3e50;">Emergency Assistance</h2>
-            <button id="sosButton" class="sos-button" onclick="triggerEmergency()">
-                SOS<br>
-                <span style="font-size: 0.5em;">EMERGENCY</span>
-            </button>
-            <p style="margin-top: 15px; color: #7f8c8d;">Press the SOS button to initiate emergency call</p>
-        </div>
+            <div class="map-container">
+                <div class="location-marker">📍 Paphos, ABC Office</div>
+            </div>
 
-        <div class="status-section">
-            <div id="status" class="status idle">🟢 System Ready</div>
-            <div id="statusDetails" style="font-size: 0.9em; color: #6c757d;">Click SOS button to test emergency call system</div>
-        </div>
-
-        <div id="responseDetails" class="response-details">
-            <h5>Call Response Details:</h5>
-            <pre id="responseContent"></pre>
-        </div>
-
-        <div class="logs">
-            <h4>📋 System Logs</h4>
-            <div id="logContainer">
-                <div class="log-entry">
-                    <span class="log-timestamp">[System Started]</span> RideGuard Emergency System initialized
+            <div class="vehicle-info">
+                <div class="vehicle-item">
+                    <div class="vehicle-icon">🚗</div>
+                    <div class="vehicle-text">BMW C5-Series • ALEX777</div>
+                </div>
+                <div class="vehicle-item">
+                    <div class="vehicle-icon">📍</div>
+                    <div class="vehicle-text">Paphos, ABC Office</div>
                 </div>
             </div>
         </div>
+
+        <div id="statusIndicator" class="status-indicator idle">System Ready</div>
+
+        <div id="logsContainer" class="logs-container">
+            <div class="logs-header">Emergency Logs</div>
+            <div id="logEntries">
+                <div class="log-entry">
+                    <span class="log-timestamp">[INIT]</span>
+                    RideGuard Emergency System initialized
+                </div>
+            </div>
+        </div>
+
+        <div class="emergency-button-container">
+            <button id="emergencyButton" class="emergency-button" onclick="triggerEmergency()">
+                <span class="emergency-icon">🚨</span>
+                Call 112
+            </button>
+        </div>
+
+        <div class="home-indicator"></div>
     </div>
 
     <script>
         function addLog(message) {
-            const logContainer = document.getElementById('logContainer');
+            const logEntries = document.getElementById('logEntries');
             const timestamp = new Date().toLocaleTimeString();
             const logEntry = document.createElement('div');
             logEntry.className = 'log-entry';
-            logEntry.innerHTML = `<span class="log-timestamp">[${timestamp}]</span> ${message}`;
-            logContainer.appendChild(logEntry);
-            logContainer.scrollTop = logContainer.scrollHeight;
+            logEntry.innerHTML = `<span class="log-timestamp">[${timestamp}]</span>${message}`;
+            logEntries.appendChild(logEntry);
+            
+            // Show logs container when there are logs
+            const logsContainer = document.getElementById('logsContainer');
+            logsContainer.classList.add('show');
+            
+            // Auto-hide logs after 10 seconds
+            setTimeout(() => {
+                logsContainer.classList.remove('show');
+            }, 10000);
         }
 
         function updateStatus(status, message) {
-            const statusElement = document.getElementById('status');
-            const statusDetails = document.getElementById('statusDetails');
+            const statusIndicator = document.getElementById('statusIndicator');
             
-            statusElement.className = `status ${status}`;
-            statusDetails.textContent = message;
+            statusIndicator.className = `status-indicator ${status}`;
             
             switch(status) {
                 case 'idle':
-                    statusElement.textContent = '🟢 System Ready';
+                    statusIndicator.textContent = 'System Ready';
                     break;
                 case 'calling':
-                    statusElement.textContent = '🟡 Emergency Call in Progress';
+                    statusIndicator.textContent = 'Calling...';
                     break;
                 case 'success':
-                    statusElement.textContent = '✅ Emergency Call Completed';
+                    statusIndicator.textContent = 'Call Complete';
                     break;
                 case 'error':
-                    statusElement.textContent = '❌ Emergency Call Failed';
+                    statusIndicator.textContent = 'Call Failed';
                     break;
             }
         }
 
         async function triggerEmergency() {
-            const sosButton = document.getElementById('sosButton');
-            const responseDetails = document.getElementById('responseDetails');
+            const emergencyButton = document.getElementById('emergencyButton');
             
-            sosButton.classList.add('calling');
-            sosButton.disabled = true;
+            emergencyButton.classList.add('calling');
+            emergencyButton.disabled = true;
+            emergencyButton.innerHTML = '<span class="emergency-icon">📞</span>Calling...';
             
-            updateStatus('calling', 'Initiating emergency call to authorities...');
-            addLog('🚨 EMERGENCY TRIGGERED - Initiating AI assistant call');
-            addLog('📞 Contacting emergency services via Bland.ai');
+            updateStatus('calling', 'Initiating emergency call...');
+            addLog('🚨 EMERGENCY TRIGGERED');
+            addLog('📞 Calling emergency services...');
+            addLog('🤖 AI Assistant activated');
             
             try {
                 const response = await fetch('/api/emergency', {
@@ -340,47 +382,66 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        incident_type: 'medical_emergency',
+                        incident_type: 'taxi_service_emergency',
                         severity: 'high',
-                        additional_info: 'Demo emergency call from RideGuard system'
+                        additional_info: 'Passenger assault situation - immediate police assistance required'
                     })
                 });
 
                 const data = await response.json();
                 
                 if (data.success) {
-                    updateStatus('success', `Emergency call initiated successfully. Call ID: ${data.call_id || 'N/A'}`);
-                    addLog(`✅ Emergency call successful - Call ID: ${data.call_id || 'N/A'}`);
-                    addLog(`📍 Emergency services contacted for: ${data.data_used.location}`);
-                    addLog(`👤 Passenger: ${data.data_used.passenger}`);
+                    updateStatus('success', 'Emergency call completed');
+                    addLog(`✅ Call successful - ID: ${data.call_id || 'N/A'}`);
+                    addLog(`📍 Location sent: ${data.data_used.location}`);
                     addLog(`🚗 Vehicle: ${data.data_used.vehicle}`);
-                    addLog(`📱 Phone: ${data.emergency_phone}`);
+                    addLog(`📱 Emergency contact: ${data.emergency_phone}`);
+                    addLog('👮‍♂️ Police have been notified');
                     
-                    if (data.sms_sent) {
-                        addLog('📱 SMS notification sent successfully');
-                    }
-                    
-                    document.getElementById('responseContent').textContent = JSON.stringify(data, null, 2);
-                    responseDetails.classList.add('show');
+                    emergencyButton.innerHTML = '<span class="emergency-icon">✅</span>Call Complete';
+                    emergencyButton.style.background = '#28a745';
                 } else {
                     throw new Error(data.message || 'Emergency call failed');
                 }
                 
             } catch (error) {
-                updateStatus('error', `Emergency call failed: ${error.message}`);
-                addLog(`❌ Emergency call failed: ${error.message}`);
-                addLog('🔄 Please try again or contact emergency services directly');
+                updateStatus('error', 'Emergency call failed');
+                addLog(`❌ Call failed: ${error.message}`);
+                addLog('🔄 Try again or call 112 directly');
+                
+                emergencyButton.innerHTML = '<span class="emergency-icon">❌</span>Call Failed';
+                emergencyButton.style.background = '#dc3545';
             } finally {
                 setTimeout(() => {
-                    sosButton.classList.remove('calling');
-                    sosButton.disabled = false;
-                }, 2000);
+                    emergencyButton.classList.remove('calling');
+                    emergencyButton.disabled = false;
+                    emergencyButton.innerHTML = '<span class="emergency-icon">🚨</span>Call 112';
+                    emergencyButton.style.background = '#dc3545';
+                    updateStatus('idle', 'System ready');
+                }, 5000);
             }
         }
 
-        addLog('🛡️ RideGuard Emergency System ready for demonstration');
-        addLog('🎯 Demo configured for Cyprus emergency services (+357 99000000)');
-        addLog('🤖 AI Assistant powered by Bland.ai technology');
+        // Initialize the system
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('🛡️ RideGuard system initialized');
+            addLog('📱 Demo ready for Cyprus emergency services');
+            addLog('🤖 AI powered by Bland.ai');
+            
+            // Update time
+            function updateTime() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    hour12: false 
+                });
+                document.querySelector('.time').textContent = timeString;
+            }
+            
+            updateTime();
+            setInterval(updateTime, 1000);
+        });
     </script>
 </body>
 </html>

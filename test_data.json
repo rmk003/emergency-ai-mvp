@@ -21,9 +21,9 @@
     "address": "Paphos, ABC Office"
   },
   "incident": {
-    "type": "medical_emergency",
-    "description": "Passenger feeling chest pain and difficulty breathing",
-    "timestamp": "2024-12-15T14:30:00Z",
+    "type": "taxi_service_emergency",
+    "description": "The passenger is being assaulted by the taxi driver",
+    "timestamp": "2025-09-13T13:30:00Z",
     "severity": "high"
   },
   "ride_info": {
